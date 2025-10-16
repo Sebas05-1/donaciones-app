@@ -1,0 +1,48 @@
+{% extends 'base.html' %}
+{% block title %}Dashboard{% endblock %}
+{% block content %}
+<h3>Panel</h3>
+<p>Rol: <strong>{{ role or 'No asignado' }}</strong></p>
+
+<div class="d-flex flex-wrap gap-2">
+  {% if role == 'superAdmin' %}
+    <!-- Sección para superAdmin -->
+    <a href="{{ url_for('main.usuarios') }}" class="btn btn-outline-primary">Usuarios</a>
+    <a href="{{ url_for('main.donantes') }}" class="btn btn-outline-primary">Donantes</a>
+    <a href="{{ url_for('main.donantes_nuevo') }}" class="btn btn-outline-primary">Nuevo Donante</a>
+    <a href="{{ url_for('main.donaciones') }}" class="btn btn-outline-primary">Donaciones</a>
+    <a href="{{ url_for('main.donaciones_nuevo') }}" class="btn btn-outline-primary">Nueva Donación</a>
+    <a href="{{ url_for('main.beneficiarios') }}" class="btn btn-outline-primary">Beneficiarios</a>
+    <a href="{{ url_for('main.beneficiarios_nuevo') }}" class="btn btn-outline-primary">Nuevo Beneficiario</a>
+    <a href="{{ url_for('main.asignaciones') }}" class="btn btn-outline-primary">Asignaciones</a>
+    <a href="{{ url_for('main.asignaciones_nuevo') }}" class="btn btn-outline-primary">Nueva Asignación</a>
+    <a href="{{ url_for('main.inventario_material') }}" class="btn btn-outline-primary">Inventario Material</a>
+    <a href="{{ url_for('main.inventario_economico') }}" class="btn btn-outline-primary">Inventario Económico</a>
+  {% elif role == 'administrador' %}
+    <!-- Sección para administrador -->
+    <a href="{{ url_for('main.donantes') }}" class="btn btn-outline-primary">Donantes</a>
+    <a href="{{ url_for('main.donantes_nuevo') }}" class="btn btn-outline-primary">Nuevo Donante</a>
+    <a href="{{ url_for('main.donaciones') }}" class="btn btn-outline-primary">Donaciones</a>
+    <a href="{{ url_for('main.donaciones_nuevo') }}" class="btn btn-outline-primary">Nueva Donación</a>
+    <a href="{{ url_for('main.beneficiarios') }}" class="btn btn-outline-primary">Beneficiarios</a>
+    <a href="{{ url_for('main.beneficiarios_nuevo') }}" class="btn btn-outline-primary">Nuevo Beneficiario</a>
+    <a href="{{ url_for('main.asignaciones') }}" class="btn btn-outline-primary">Asignaciones</a>
+    <a href="{{ url_for('main.asignaciones_nuevo') }}" class="btn btn-outline-primary">Nueva Asignación</a>
+    <a href="{{ url_for('main.inventario_material') }}" class="btn btn-outline-primary">Inventario Material</a>
+    <a href="{{ url_for('main.inventario_economico') }}" class="btn btn-outline-primary">Inventario Económico</a>
+  {% elif role == 'auditor' %}
+    <!-- Sección para auditor -->
+    <a href="{{ url_for('main.donantes') }}" class="btn btn-outline-primary">Donantes</a>
+    <a href="{{ url_for('main.donaciones') }}" class="btn btn-outline-primary">Donaciones</a>
+    <a href="{{ url_for('main.beneficiarios') }}" class="btn btn-outline-primary">Beneficiarios</a>
+    <a href="{{ url_for('main.asignaciones') }}" class="btn btn-outline-primary">Asignaciones</a>
+    <a href="{{ url_for('main.inventario_material') }}" class="btn btn-outline-primary">Inventario Material</a>
+    <a href="{{ url_for('main.inventario_economico') }}" class="btn btn-outline-primary">Inventario Económico</a>
+  {% else %}
+    <!-- Caso sin rol asignado -->
+    <div class="alert alert-warning">No tienes rol asignado. Contacta al superAdmin.</div>
+  {% endif %}
+  <!-- Botón de cerrar sesión disponible para todos los usuarios autenticados -->
+  <a href="{{ url_for('main.logout') }}" class="btn btn-outline-danger">Cerrar Sesión</a>
+</div>
+{% endblock %}

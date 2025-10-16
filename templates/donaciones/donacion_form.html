@@ -1,0 +1,64 @@
+{% extends 'base.html' %}
+{% block title %}Donación{% endblock %}
+{% block content %}
+<h3>{% if donacion %}Editar{% else %}Nueva{% endif %} Donación</h3>
+<form method="post" id="donacionForm">
+  <div class="mb-3">
+    <label class="form-label">Nombre</label>
+    <input name="nombre" class="form-control" value="{{ donacion.nombre if donacion else '' }}" required>
+  </div>
+  <div class="mb-3">
+    <label class="form-label">Tipo</label>
+    <select name="tipo_id" id="tipo_id" class="form-select" required>
+      {% for t in tipos %}
+        <option value="{{ t.id }}" {% if donacion and donacion.tipo_id==t.id %}selected{% endif %}>{{ t.nombre }}</option>
+      {% endfor %}
+    </select>
+  </div>
+  <div class="mb-3">
+    <label class="form-label">Donante (opcional)</label>
+    <select name="donante_id" class="form-select">
+      <option value="">-- Anónimo --</option>
+      {% for dn in donantes %}
+        <option value="{{ dn.id }}" {% if donacion and donacion.donante_id==dn.id %}selected{% endif %}>{{ dn.nombre }}</option>
+      {% endfor %}
+    </select>
+  </div>
+
+  <div class="mb-3" id="montoDiv">
+    <label class="form-label">Monto (solo si tipo económico)</label>
+    <input name="monto" type="number" step="0.01" class="form-control" value="{{ donacion.monto if donacion and donacion.monto else '' }}">
+  </div>
+
+  <div class="mb-3" id="cantidadDiv">
+    <label class="form-label">Cantidad (solo si tipo material)</label>
+    <input name="cantidad" type="number" class="form-control" value="{{ donacion.cantidad if donacion and donacion.cantidad else '' }}">
+  </div>
+
+  <div class="mb-3">
+    <label class="form-label">Descripción</label>
+    <textarea name="descripcion" class="form-control">{{ donacion.descripcion if donacion else '' }}</textarea>
+  </div>
+
+  <button class="btn btn-primary">Guardar</button>
+  <a href="{{ url_for('main.donaciones') }}" class="btn btn-secondary">Cancelar</a>
+</form>
+
+<script>
+  function toggleFields(){
+    const tipoSelect = document.getElementById('tipo_id');
+    const tipoText = tipoSelect.options[tipoSelect.selectedIndex].text.toLowerCase();
+    const montoDiv = document.getElementById('montoDiv');
+    const cantidadDiv = document.getElementById('cantidadDiv');
+    if(tipoText.includes('economico')){
+      montoDiv.style.display = 'block'; cantidadDiv.style.display = 'none';
+    } else if(tipoText.includes('material')){
+      montoDiv.style.display = 'none'; cantidadDiv.style.display = 'block';
+    } else {
+      montoDiv.style.display = 'none'; cantidadDiv.style.display = 'none';
+    }
+  }
+  document.getElementById('tipo_id').addEventListener('change', toggleFields);
+  toggleFields();
+</script>
+{% endblock %}

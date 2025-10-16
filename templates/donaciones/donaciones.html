@@ -1,0 +1,40 @@
+{% extends 'base.html' %}
+{% block title %}Donaciones{% endblock %}
+{% block content %}
+<h3>Donaciones</h3>
+{% if session.role in ['superAdmin','administrador'] %}
+  <a href="{{ url_for('main.donaciones_nuevo') }}" class="btn btn-success mb-2">Nueva donación</a>
+{% endif %}
+<a href="{{ url_for('main.inventario_material') }}" class="btn btn-outline-info mb-2">Inventario Material</a>
+<a href="{{ url_for('main.inventario_economico') }}" class="btn btn-outline-info mb-2">Inventario Económico</a>
+
+<table class="table table-striped">
+<thead><tr><th>ID</th><th>Nombre</th><th>Tipo</th><th>Donante</th><th>Monto/Cantidad</th><th>Estado</th><th>Acciones</th></tr></thead>
+<tbody>
+  {% for d in donaciones %}
+  <tr>
+    <td>{{ d['id'] }}</td>
+    <td>{{ d['nombre'] }}</td>
+    <td>{{ d['tipo_nombre'] }}</td>
+    <td>{{ d['donante_nombre'] if d['donante_nombre'] else 'Anónimo' }}</td>
+    <td>
+      {% if d['tipo_nombre'] == 'economico' %}
+        {{ d['monto'] }}
+      {% elif d['tipo_nombre'] == 'material' %}
+        {{ d['cantidad'] }}
+      {% else %}-
+      {% endif %}
+    </td>
+    <td>{{ 'Activo' if d['estado'] else 'Inactivo' }}</td>
+    <td>
+      {% if session.role in ['superAdmin','administrador'] %}
+        <a class="btn btn-sm btn-primary" href="{{ url_for('main.donaciones_editar', id=d.id) }}">Editar</a>
+        <a class="btn btn-sm btn-warning" href="{{ url_for('main.donaciones_desactivar', id=d.id) }}">Desactivar</a>
+      {% endif %}
+    </td>
+  </tr>
+  {% endfor %}
+</tbody>
+</table>
+<a href="{{ url_for('main.dashboard') }}" class="btn btn-danger">Volver</a>
+{% endblock %}

@@ -1,0 +1,30 @@
+{% extends 'base.html' %}
+{% block title %}Usuarios{% endblock %}
+{% block content %}
+<h3>Usuarios</h3>
+<table class="table table-striped">
+  <thead>
+    <tr>
+      <th>ID</th><th>Usuario</th><th>Email</th><th>Rol</th><th>Activo</th><th>Acciones</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for u in users %}
+    <tr>
+      <td>{{ u.id }}</td>
+      <td>{{ u.username }}</td>
+      <td>{{ u.email }}</td>
+      <td>{{ u.role.nombre if u.role else 'Nulo' }}</td>
+      <td>{{ 'Sí' if u.activo else 'No' }}</td>
+      <td>
+        <a class="btn btn-sm btn-primary" href="{{ url_for('main.editar_usuario', user_id=u.id) }}">Editar</a>
+        {% if u.activo %}
+        <a class="btn btn-sm btn-danger" href="{{ url_for('main.desactivar_usuario', user_id=u.id) }}">Desactivar</a>
+        {% endif %}
+      </td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+<a href="{{ url_for('main.dashboard') }}" class="btn btn-danger">Volver</a>
+{% endblock %}

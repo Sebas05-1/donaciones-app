@@ -1,0 +1,30 @@
+{% extends 'base.html' %}
+{% block title %}Donantes{% endblock %}
+{% block content %}
+<h3>Donantes</h3>
+{% if session.role in ['superAdmin','administrador'] %}
+  <a href="{{ url_for('main.donantes_nuevo') }}" class="btn btn-success mb-2">Nuevo donante</a>
+{% endif %}
+<table class="table table-striped">
+<thead><tr><th>ID</th><th>Nombre</th><th>Correo</th><th>Tel</th><th>Cedula</th><th>Estado</th><th>Acciones</th></tr></thead>
+<tbody>
+  {% for d in donantes %}
+  <tr>
+    <td>{{ d.id }}</td>
+    <td>{{ d.nombre }}</td>
+    <td>{{ d.correo }}</td>
+    <td>{{ d.telefono }}</td>
+    <td>{{ d.cedula }}</td>
+    <td>{{ 'Activo' if d.estado else 'Inactivo' }}</td>
+    <td>
+      {% if session.role in ['superAdmin','administrador'] %}
+        <a class="btn btn-sm btn-primary" href="{{ url_for('main.donantes_editar', id=d.id) }}">Editar</a>
+        <a class="btn btn-sm btn-warning" href="{{ url_for('main.donantes_toggle', id=d.id) }}">Toggle</a>
+      {% endif %}
+    </td>
+  </tr>
+  {% endfor %}
+</tbody>
+</table>
+<a href="{{ url_for('main.dashboard') }}" class="btn btn-danger">Volver</a>
+{% endblock %}

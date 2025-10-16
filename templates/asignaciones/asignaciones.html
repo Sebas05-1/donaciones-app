@@ -1,0 +1,55 @@
+{% extends "base.html" %}
+
+{% block title %}Asignaciones{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-3">
+    <h2>Asignaciones</h2>
+    <a href="{{ url_for('main.asignaciones_nuevo') }}" class="btn btn-success">Nueva Asignación</a>
+</div>
+
+{% with messages = get_flashed_messages(with_categories=true) %}
+  {% if messages %}
+    {% for category, message in messages %}
+      <div class="alert alert-{{ category }}">{{ message }}</div>
+    {% endfor %}
+  {% endif %}
+{% endwith %}
+
+<table class="table table-striped table-hover">
+    <thead class="table-dark">
+        <tr>
+            <th>ID</th>
+            <th>Donación</th>
+            <th>Beneficiario</th>
+            <th>Tipo</th>
+            <th>Cantidad</th>
+            <th>Monto</th>
+            <th>Fecha</th>
+            <th>Acciones</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for asignacion in asignaciones %}
+        <tr>
+            <td>{{ asignacion.id }}</td>
+            <td>{{ asignacion.donacion.descripcion if asignacion.donacion else '---' }}</td>
+            <td>{{ asignacion.beneficiario.nombre if asignacion.beneficiario else '---' }}</td>
+            <td>{{ asignacion.tipo_donacion.nombre if asignacion.tipo_donacion else '---' }}</td>
+            <td>{{ asignacion.cantidad if asignacion.cantidad else '---' }}</td>
+            <td>{{ asignacion.monto if asignacion.monto else '---' }}</td>
+            <td>{{ asignacion.fecha_asignacion.strftime('%d/%m/%Y') }}</td>
+            <td>
+                <a href="{{ url_for('main.asignaciones_editar', id=asignacion.id) }}" class="btn btn-sm btn-primary">Editar</a>
+                <a href="{{ url_for('main.asignaciones_eliminar', id=asignacion.id) }}" class="btn btn-sm btn-danger" onclick="return confirm('¿Seguro de eliminar?')">Eliminar</a>
+            </td>
+        </tr>
+        {% else %}
+        <tr>
+            <td colspan="8" class="text-center">No hay asignaciones registradas</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+<a href="{{ url_for('main.dashboard') }}" class="btn btn-danger">Volver</a>
+{% endblock %}

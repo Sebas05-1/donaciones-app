@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+
+{% block title %}Inventario Material{% endblock %}
+
+{% block content %}
+<h2>Inventario de Donaciones Materiales</h2>
+
+<table class="table table-striped table-hover">
+    <thead class="table-dark">
+        <tr>
+            <th>ID</th>
+            <th>Descripción</th>
+            <th>Cantidad</th>
+            <th>Donante</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for donacion in donaciones %}
+        <tr>
+            <td>{{ donacion.id }}</td>
+            <td>{{ donacion.descripcion }}</td>
+            <td>{{ donacion.cantidad }}</td>
+            <td>{{ donacion.donante.nombre if donacion.donante else '---' }}</td>
+        </tr>
+        {% else %}
+        <tr>
+            <td colspan="4" class="text-center">No hay donaciones materiales registradas</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}

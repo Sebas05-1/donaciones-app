@@ -1,0 +1,78 @@
+{% extends "base.html" %}
+{% block content %}
+<h2>{{ 'Editar' if asignacion else 'Nueva' }} Asignación</h2>
+
+{% with messages = get_flashed_messages(with_categories=true) %}
+  {% if messages %}
+    {% for category, message in messages %}
+      <div class="alert alert-{{ category }}">{{ message }}</div>
+    {% endfor %}
+  {% endif %}
+{% endwith %}
+
+<form method="POST">
+    <div class="mb-3">
+        <label for="donacion_id" class="form-label">Donación</label>
+        <select class="form-select" id="donacion_id" name="donacion_id" required>
+            <option value="">Seleccione una donación</option>
+            {% for donacion in donaciones %}
+            <option value="{{ donacion.id }}" {% if asignacion and asignacion.donacion_id == donacion.id %}selected{% endif %}>
+                {{ donacion.nombre }}
+            </option>
+            {% endfor %}
+        </select>
+    </div>
+    <div class="mb-3">
+        <label for="beneficiario_id" class="form-label">Beneficiario</label>
+        <select class="form-select" id="beneficiario_id" name="beneficiario_id" required>
+            <option value="">Seleccione un beneficiario</option>
+            {% for beneficiario in beneficiarios %}
+            <option value="{{ beneficiario.id }}" {% if asignacion and asignacion.beneficiario_id == beneficiario.id %}selected{% endif %}>
+                {{ beneficiario.nombre }}
+            </option>
+            {% endfor %}
+        </select>
+    </div>
+    <div class="mb-3">
+        <label for="tipo_id" class="form-label">Tipo de Donación</label>
+        <select class="form-select" id="tipo_id" name="tipo_id" required>
+            <option value="">Seleccione un tipo</option>
+            {% for tipo in tipos_donacion %}
+            <option value="{{ tipo.id }}" {% if asignacion and asignacion.tipo_id == tipo.id %}selected{% endif %}>
+                {{ tipo.nombre }}
+            </option>
+            {% endfor %}
+        </select>
+    </div>
+    <div class="mb-3" id="cantidad_field" style="display: none;">
+        <label for="cantidad" class="form-label">Cantidad</label>
+        <input type="number" class="form-control" id="cantidad" name="cantidad" min="1"
+               value="{{ asignacion.cantidad if asignacion and asignacion.cantidad else '' }}">
+    </div>
+    <div class="mb-3" id="monto_field" style="display: none;">
+        <label for="monto" class="form-label">Monto</label>
+        <input type="number" step="0.01" class="form-control" id="monto" name="monto"
+               value="{{ asignacion.monto if asignacion and asignacion.monto else '' }}">
+    </div>
+    <button type="submit" class="btn btn-success">Guardar</button>
+    <a href="{{ url_for('main.asignaciones') }}" class="btn btn-secondary">Cancelar</a>
+</form>
+
+<script>
+    // JavaScript to dynamically show/hide cantidad and monto fields based on tipo_id
+    function updateFields() {
+        const tipoId = document.getElementById('tipo_id').value;
+        const cantidadField = document.getElementById('cantidad_field');
+        const montoField = document.getElementById('monto_field');
+        const selectedOption = document.getElementById('tipo_id').options[document.getElementById('tipo_id').selectedIndex];
+        const tipoNombre = selectedOption ? selectedOption.text.toLowerCase() : '';
+
+        cantidadField.style.display = tipoNombre === 'material' ? 'block' : 'none';
+        montoField.style.display = tipoNombre === 'economico' ? 'block' : 'none';
+    }
+
+    document.getElementById('tipo_id').addEventListener('change', updateFields);
+    // Run on page load to set initial state
+    updateFields();
+</script>
+{% endblock %}

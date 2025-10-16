@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+{% block content %}
+<h3>{% if donante %}Editar{% else %}Nuevo{% endif %} Donante</h3>
+<div class="card shadow p-4">
+    <h3 class="mb-4">{{ 'Editar' if donante else 'Nuevo' }} Donante</h3>
+
+    <form method="POST">
+        <div class="mb-3">
+            <label for="nombre" class="form-label">Nombre *</label>
+            <input type="text" class="form-control" id="nombre" name="nombre" 
+                   value="{{ donante.nombre if donante else '' }}" required>
+        </div>
+
+        <div class="mb-3">
+            <label for="correo" class="form-label">Correo</label>
+            <input type="email" class="form-control" id="correo" name="correo" 
+                   value="{{ donante.correo if donante else '' }}">
+        </div>
+
+        <div class="mb-3">
+            <label for="telefono" class="form-label">Teléfono</label>
+            <input type="text" class="form-control" id="telefono" name="telefono" 
+                   value="{{ donante.telefono if donante else '' }}">
+        </div>
+
+        <div class="mb-3">
+            <label for="direccion" class="form-label">Dirección</label>
+            <input type="text" class="form-control" id="direccion" name="direccion" 
+                   value="{{ donante.direccion if donante else '' }}">
+        </div>
+
+        <div class="mb-3">
+            <label for="cedula" class="form-label">Cédula</label>
+            <input type="text" class="form-control" id="cedula" name="cedula" 
+                   value="{{ donante.cedula if donante else '' }}">
+        </div>
+
+        <button type="submit" class="btn btn-success">Guardar</button>
+        <a href="{{ url_for('main.donantes') }}" class="btn btn-secondary">Cancelar</a>
+    </form>
+</div>
+{% endblock %}
