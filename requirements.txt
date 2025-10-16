@@ -2,3 +2,6 @@ flask
 pymysql
 bcrypt
 flask_bcrypt
+
+PyInstaller
+pytest
